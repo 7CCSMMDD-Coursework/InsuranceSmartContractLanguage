@@ -1,0 +1,11 @@
+pool contract PoolInsurance between 
+company with address 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4 and 
+customer with address 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2 is owner participates with 20%,
+customer with address 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db is owner participates with 35%,
+customer with address 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB is owner participates with 45%
+for object tesla
+Terms {
+	Amount of 10.0 payable every 10 days 25% increase per claim
+	Amount of 30.0 claimed
+	Upon violation claim reduced by 10%, premium increased by 5%
+}
