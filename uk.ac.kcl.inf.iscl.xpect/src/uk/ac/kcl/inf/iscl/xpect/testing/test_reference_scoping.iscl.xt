@@ -1,0 +1,15 @@
+// XPECT_SETUP uk.ac.kcl.inf.iscl.xpect.testing.XPectTests END_SETUP
+
+personal contract PersonalInsurance between 
+company with address 0x5B38 and 
+customer with address 0xAb84
+//Check that only customers can own insurable objects
+// XPECT scope at 0xAb84 --> 0xAb84, !0x5B38
+for object tesla owned by 0xAb84
+Terms {
+	Amount of 10.0 payable every 10 days 5% increase per claim
+	//Check that only customers can receive claims
+	// XPECT scope at 0xAb84 --> 0xAb84, !0x5B38
+	Amount of 30.0 claimed by 0xAb84
+	Upon violation claim reduced by 10%, premium increased by 5%
+}

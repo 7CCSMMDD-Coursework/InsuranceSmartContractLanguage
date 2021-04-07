@@ -1,0 +1,17 @@
+// XPECT_SETUP uk.ac.kcl.inf.iscl.xpect.testing.XPectTests END_SETUP
+
+personal contract PersonalInsurance between 
+company with address 0x5B38 and 
+//Check invalid participation warning is produced
+// XPECT warnings --> "No participation needs to be specified for personal or family contracts; Sum is split equally among the beneficiaries" at "customer with address 0xAb84 participates with 100%"
+customer with address 0xAb84 participates with 100%
+for object tesla owned by 0xAb84
+Terms {
+	//Check invalid premium increase error is produced
+	// XPECT errors --> "Premium period needs to be greater than 0" at "0"
+	Amount of 10.0 payable every 0 days 10% increase per claim
+	//Check invalid claim error is produced
+	// XPECT errors --> "Customer claim needs to be greater than premium paid" at "Amount of 5.0 claimed by 0xAb84"
+	Amount of 5.0 claimed by 0xAb84	
+	Upon violation claim reduced by 10%, premium increased by 5%
+}
