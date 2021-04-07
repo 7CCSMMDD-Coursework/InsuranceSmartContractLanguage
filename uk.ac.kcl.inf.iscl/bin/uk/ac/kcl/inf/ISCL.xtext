@@ -1,0 +1,78 @@
+grammar uk.ac.kcl.inf.ISCL with org.eclipse.xtext.common.Terminals
+
+generate iSCL "http://www.ac.uk/kcl/inf/ISCL"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Contract:
+	type=ContractType 'contract' name=EString 'between'
+		
+	'company' company=Company
+	
+	'and' customers+=Customer( "," customers+=Customer)*
+		 
+	'for' insurableObjects+=InsurableObject ( "," insurableObjects+=InsurableObject)*
+	
+	'Terms' '{'
+		paymentTerm=PaymentTerm
+		claimTerm=ClaimTerm
+		('Upon violation' violationTerms+=ViolationTerm ( "," violationTerms+=ViolationTerm)*)?
+	'}'	
+;
+
+enum ContractType:
+	personal | pool | family
+;
+
+enum Coverage:
+	beneficiary | owner
+;
+
+PaymentTerm:
+	'Amount of' premium=REAL 'payable every' period=INT 'days' increase=INT'%' 'increase per claim'
+;
+
+ClaimTerm:
+	'Amount of' claim=REAL 'claimed' ('by' claimer=[Customer|ADDRESS])?
+;
+
+ViolationTerm:
+	ContractCancellationTerm | ClaimReductionTerm | PremiumIncreaseTerm
+;
+
+ContractCancellationTerm:
+	 cancelled?='cancelled'
+;
+
+ClaimReductionTerm:
+	'claim reduced by' claimReduction=INT'%'
+;
+
+PremiumIncreaseTerm:
+	'premium increased by' premiumIncrease=INT'%'
+;
+
+Customer:
+	'customer with address' name=ADDRESS ('is' coverage=Coverage)? ('participates with' participation=INT '%')?
+;
+
+Company:
+	'with address' name=ADDRESS
+;
+
+
+InsurableObject:
+	'object' name=EString ('owned by' owner=[Customer|ADDRESS])?
+;
+
+terminal ADDRESS returns ecore::EString:
+	'0x'('a'..'z'|'A'..'Z'|'0'..'9')+
+;
+
+REAL returns ecore::EFloat hidden():
+	INT? "." INT
+;	
+
+EString returns ecore::EString:
+	STRING | ID
+;

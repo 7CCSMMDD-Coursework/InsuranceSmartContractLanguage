@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="iSCL" nsURI="http://www.ac.uk/kcl/inf/ISCL" nsPrefix="iSCL">
+  <eClassifiers xsi:type="ecore:EClass" name="Contract">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ContractType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="company" eType="#//Company"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+        eType="#//Customer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="insurableObjects" upperBound="-1"
+        eType="#//InsurableObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paymentTerm" eType="#//PaymentTerm"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="claimTerm" eType="#//ClaimTerm"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="violationTerms" upperBound="-1"
+        eType="#//ViolationTerm" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ContractType">
+    <eLiterals name="personal" literal="personal"/>
+    <eLiterals name="pool" value="1" literal="pool"/>
+    <eLiterals name="family" value="2" literal="family"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Coverage">
+    <eLiterals name="beneficiary" literal="beneficiary"/>
+    <eLiterals name="owner" value="1" literal="owner"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PaymentTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="premium" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="increase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClaimTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="claim" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="claimer" eType="#//Customer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViolationTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ContractCancellationTerm" eSuperTypes="#//ViolationTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancelled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClaimReductionTerm" eSuperTypes="#//ViolationTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="claimReduction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PremiumIncreaseTerm" eSuperTypes="#//ViolationTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="premiumIncrease" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Customer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coverage" eType="#//Coverage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Company">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InsurableObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//Customer"/>
+  </eClassifiers>
+</ecore:EPackage>

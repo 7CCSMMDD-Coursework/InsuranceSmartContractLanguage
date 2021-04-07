@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: uk.ac.kcl.inf.iscl
+Bundle-ManifestVersion: 2
+Bundle-Name: uk.ac.kcl.inf.iscl
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: uk.ac.kcl.inf.iscl; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: uk.ac.kcl.inf.iSCL,
+ uk.ac.kcl.inf.scoping,
+ uk.ac.kcl.inf.generator,
+ uk.ac.kcl.inf.iSCL.util,
+ uk.ac.kcl.inf.parser.antlr,
+ uk.ac.kcl.inf.parser.antlr.internal,
+ uk.ac.kcl.inf.validation,
+ uk.ac.kcl.inf,
+ uk.ac.kcl.inf.services,
+ uk.ac.kcl.inf.iSCL.impl,
+ uk.ac.kcl.inf.serializer
+Import-Package: org.apache.log4j
