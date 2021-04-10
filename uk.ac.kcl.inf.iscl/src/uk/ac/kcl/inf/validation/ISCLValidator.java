@@ -47,12 +47,12 @@ public class ISCLValidator extends AbstractISCLValidator {
 	/**
 	 * If contract type is family. Then there needs to be ONE owner and one or more beneficiaries.
 	 * 
-	 * No participation will be specified. We will just divide the claim among the beneficiaries.
+	 * No participation will be specified. The claim is divided equally among the beneficiaries.
 	 * 
 	 * @param contract
 	 */
 	@Check(CheckType.NORMAL)
-	public void checkFamilyContractCoverage(Contract contract) {
+	public void checkFamilyContractOwnerAndBeneficiaryParticipation(Contract contract) {
 
 		if(ContractType.FAMILY.equals(contract.getType())){
 			
@@ -123,7 +123,7 @@ public class ISCLValidator extends AbstractISCLValidator {
 	}
 	
 	/**
-	 * Payment term premium increase must be between 0.0% and 100.0%.
+	 * Payment term premium increase must be between 0% and 100%.
 	 * 
 	 * This increase applies only if a claim has been made.
 	 * 
@@ -197,7 +197,7 @@ public class ISCLValidator extends AbstractISCLValidator {
 	 */
 	@Check(CheckType.NORMAL)
 	public void checkOnlyOneCustomerForPersonalContract(Contract contract) {
-		if (contract.getType() == ContractType.PERSONAL) 
+		if (ContractType.PERSONAL.equals(contract.getType())) 
 			if (contract.getCustomers().size() != 1) 
 				error("Personal contract needs to have only one customer", contract,
 						ISCLPackage.Literals.CONTRACT__CUSTOMERS, INVALID_CUSTOMER_NUMBER_PERSONAL);								
