@@ -1,4 +1,4 @@
-# InsuranceSmartContractLanguage# Insurance Smart Contract Language 📃
+# Insurance Smart Contract Language 📃
 
 By
 
