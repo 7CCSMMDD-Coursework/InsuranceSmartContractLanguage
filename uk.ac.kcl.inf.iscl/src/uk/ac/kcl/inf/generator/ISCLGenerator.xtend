@@ -20,17 +20,30 @@ import uk.ac.kcl.inf.iSCL.Coverage
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class ISCLGenerator extends AbstractGenerator {
-
+	
+	/**
+	 * Initial generation method. Generate file and it's contents.
+	 */
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val model = resource.contents.head as Contract
 		fsa.generateFile(resource.targetFileName, model.doGenerate)
 	}
 	
+	/**
+	 * Return file name with required extension.
+	 */
 	def String getTargetFileName(Resource resource) {
 		val originalFileName = resource.URI.lastSegment;
 		originalFileName.substring(0, originalFileName.indexOf(".")) + ".sol";
 	}
 	
+	/**
+	 * Main generating method for the Solidity file context. Sets up common values and
+	 * initializes participants.
+	 * 
+	 * Calls dispatch methods on the contract to generate pay, claim and constructor code.
+	 *
+	 */
 	def String doGenerate(Contract contract) {
 		'''
 		// SPDX-License-Identifier: GPL-3.0
@@ -79,7 +92,10 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 
-
+	/**
+	 * Create participant fields with addresses based on the contract type and customer
+	 * number.
+	 */
 	def String getParticipants(Contract contract){
 				
 		val contractType = contract.type;
@@ -114,6 +130,8 @@ class ISCLGenerator extends AbstractGenerator {
 	}
 
 
+	/* Dispatch methods for handling violations  */
+
 	dispatch def String handleViolationTerms(ContractCancellationTerm violationTerm){
 		
 		'''
@@ -123,6 +141,7 @@ class ISCLGenerator extends AbstractGenerator {
 			require(contractState != ContractState.BLOCKED, "The contract has been blocked due to late payment.");
 		'''
 	}
+	
 	
 	dispatch def String handleViolationTerms(ClaimReductionTerm violationTerm){
 		
@@ -142,7 +161,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 
-
+	/**
+	 * Generate constructor method based on contract type
+	 */
 	def String generateConstructor(Contract contract){
 		
 		val signature_start = "constructor() {\n\n"
@@ -160,6 +181,9 @@ class ISCLGenerator extends AbstractGenerator {
 	}
 	
 	
+	/**
+	 * Generate payment method (pay function) based on contract type.
+	 */
 	def String generatePremiumPaymentFunction(Contract contract){
 					
 		val signature_start = "function pay() public payable {\n\n"
@@ -178,6 +202,9 @@ class ISCLGenerator extends AbstractGenerator {
 		return signature_start.concat(violationTerms).concat(body).concat(signature_end);
 	}
 	
+	/**
+	 * Generate claim method based on contract type.
+	 */
 	def String generateClaimFunction(Contract contract){
 		
 		val signature_start = "function claim() public payable {\n\n"
@@ -193,6 +220,8 @@ class ISCLGenerator extends AbstractGenerator {
 		
 		return signature_start.concat(body).concat(signature_end);
 	}
+	
+	/* Helper methods for returning constructor code for personal, family and pool contracts */
 	
 	def String getContructorPersonal(Contract contract){
 		'''
@@ -237,7 +266,9 @@ class ISCLGenerator extends AbstractGenerator {
 	}
 	
 	
-	
+	/**
+	 * Generate parametrized require statements in Solidity.
+	 */
 	def String generateRequirement(String left, String operator, String right, String error_message){
 		
 		'''
@@ -245,7 +276,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
-
+	/**
+	 * Generate parametrized transfer statements in Solidity.
+	 */
 	def String generateTransfer(String address, String value) {
 		
 		'''
@@ -253,6 +286,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 
+	/**
+	 * Generate contract activation statement.
+	 */
 	def String statementActivateContract() {
 		
 		'''
@@ -260,6 +296,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	/**
+	 * Generate premium function for contract type: PERSONAL
+	 */
 	def String generatePremiumFunctionPersonal(Contract contract){
 		
 		'''
@@ -275,6 +314,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	/**
+	 * Generate premium function for contract type: FAMILY
+	 */
 	def String generatePremiumFunctionFamily(Contract contract){
 
 		'''		        
@@ -290,6 +332,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	/**
+	 * Generate premium function for contract type: POOL
+	 */
 	def String generatePremiumFunctionPool(Contract contract){
 		
 		'''		        
@@ -307,7 +352,10 @@ class ISCLGenerator extends AbstractGenerator {
 			}
 		'''
 	}
-		
+	
+	/**
+	 * Generate claim function for contract type: PERSONAL
+	 */
 	def String generateClaimFunctionPersonal(Contract contract){
 		
 		'''
@@ -323,6 +371,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	/**
+	 * Generate claim function for contract type: PERSONAL
+	 */
 	def String generateClaimFunctionFamily(Contract contract){
 
 		'''
@@ -340,6 +391,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	/**
+	 * Generate claim function for contract type: PERSONAL
+	 */
 	def String generateClaimFunctionPool(Contract contract){
 		
 		'''
@@ -358,6 +412,8 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	/* Generating utility functions for calculating and getting premium and claim values */
+	
 	def String generateGetPremium(){
 		'''
 		function getPremium() public view returns (uint256 premium) {
@@ -366,6 +422,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''
 	}
 	
+	/**
+	 * Get contract claim.
+	 */
 	def String generateGetClaim(){
 		'''
 		function getClaim() public view returns (uint256 the_claim) {
@@ -383,7 +442,9 @@ class ISCLGenerator extends AbstractGenerator {
 		'''		
 	}
 	
-	
+	/**
+	 * Generate parametrized get premium method with participation requirement.
+	 */
 	def String generateGetPremiumPool(){
 		'''
 		function getPremium() public view returns (uint256 premium) {
